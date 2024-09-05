@@ -1,15 +1,14 @@
-export interface Movie {
+export interface User {
     _id?: string;
     name: string;
-    category: string;
+    email: string;
+    username: string;
+    password: string;
+    status: string;
     type: string;
     introduction: string;
-    starring: string;
-    logo: string;
+    picture: string;
     viewCount: string;
-    lastEpisodeAt: string;
-    broadcastedAt: string;
-    active: string;
     url: string;
     createdAt: string;
     updatedAt: string;
