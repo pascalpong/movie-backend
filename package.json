@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "@fastify/mongodb": "^8.0.0",
+    "@fastify/type-provider-typebox": "^4.1.0",
+    "dotenv": "^16.4.5",
+    "fastify-mongodb": "^4.2.0",
+    "nodemon": "^3.1.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "fastify": "^4.28.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.5.4"
+  },
+  "name": "movie-backend",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/server.ts"
+  },
+  "author": "",
+  "license": "ISC"
+}
