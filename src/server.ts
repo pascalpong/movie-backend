@@ -1,29 +1,21 @@
-import fastify from 'fastify';
-import fastifyMongo from '@fastify/mongodb';
-import movieRoutes from './routes/movie.route';
-import { AddressInfo } from 'net';
-import dotenv from 'dotenv';
+import app from './app';
+import { initializeCollection } from './services/movie.service'; 
+import { Movie } from './models/movie';
 
-dotenv.config();
-
-const server = fastify({ logger: true });
-
-// Connect to MongoDB
-server.register(fastifyMongo, {
-  url: process.env.MONGO_URL,
-})
-
-// Register routes
-server.register(movieRoutes);
-
-// Start the server
 const start = async () => {
   try {
-    const port = Number(process.env.PORT) ?? 8000;
-    await server.listen({ port });
-    server.log.info(`Server listening on ${(server.server.address() as AddressInfo)?.port ?? 'unknown port'}`);
+    const port = Number(process.env.PORT) || 8000;
+
+    // Initialize the movie model
+    initializeCollection(Movie);
+
+    await app.listen({ port });
+    const address = app.server.address();
+    if (address && typeof address !== 'string') { // Check if address is not null
+      app.log.info(`Server listening on ${address.port}`);
+    }
   } catch (err) {
-    server.log.error(err);
+    app.log.error(err);
     process.exit(1);
   }
 };

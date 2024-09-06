@@ -1,17 +1,21 @@
-export interface Movie {
-    _id?: string;
-    name: string;
-    category: string;
-    type: string;
-    introduction: string;
-    starring: string;
-    logo: string;
-    viewCount: string;
-    lastEpisodeAt: string;
-    broadcastedAt: string;
-    active: string;
-    url: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string;
-}
+import { Schema, model } from 'mongoose';
+import MovieType from '../types/movie.type';
+
+const movieSchema = new Schema<MovieType>({ 
+    name: { type: String, required: true },
+    category: { type: String, required: true },
+    type: { type: String },
+    introduction: { type: String },
+    starring: { type: String },
+    logo: { type: String },
+    viewCount: { type: String },
+    lastEpisodeAt: { type: String },
+    broadcastedAt: { type: String },
+    active: { type: String },
+    url: { type: String },
+    createdAt: { type: Date },
+    updatedAt: { type: Date },
+    deletedAt: { type: Date }
+});
+
+export const Movie = model('Movie', movieSchema);

@@ -1,0 +1,24 @@
+import fastify from 'fastify';
+import dotenv from 'dotenv';
+dotenv.config(); 
+import movieRoutes from './routes/movie.route';
+import mongoose from 'mongoose';
+
+const app = fastify({ logger: true });
+
+// Connect to MongoDB
+const connectToDatabase = async () => {
+    try {
+        await mongoose.connect( `${process.env.MONGO_URL}`, {});
+        console.log('Connected to MongoDB');
+    } catch (error) {
+        console.error('MongoDB connection error:', error);
+    }
+};
+
+connectToDatabase();
+
+// Register routes
+app.register(movieRoutes);
+
+export default app;
