@@ -1,5 +1,5 @@
 import app from './app';
-import { initializeCollection } from './services/movie.service'; 
+import { initializeCollection } from './services/movie/movie.service'; 
 import { Movie } from './models/movie';
 
 const start = async () => {

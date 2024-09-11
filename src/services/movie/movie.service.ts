@@ -1,4 +1,4 @@
-import Movie from '../types/movie.type';
+import Movie from '../../types/movie.type';
 import { Model, ObjectId as MongooseObjectId, Types } from 'mongoose'; // Ensure ObjectId is imported
 
 let movieModel: Model<Movie>;
@@ -21,6 +21,7 @@ export const getAllMovies = async () => {
 
 export const addMovie = async (movie: Movie) => {
   try { 
+    const body = movie;
       const newMovie = new movieModel({...movie, createdAt: new Date()});
       const result = await newMovie.save();
       return result._id;
