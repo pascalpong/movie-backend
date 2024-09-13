@@ -1,23 +1,26 @@
 import axios from 'axios';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { addMovie, updateMovie, deleteMovie } from '../services/movie/movie.service';
-import { aes128Encrypt, generateSignedLink, getRealIp } from '../services/movie/util';
+import { generateSignedLink } from '../services/movie/util';
 
 const movieProviderApi = process.env.MOVIE_PROVIDER_API as string;
 
 export const toGetAllMovies = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-        const { category, page } = request.query as any;
+        const { category, page, search } = request.query as { category: string, page: string, search: string };
         const params = new URLSearchParams();
-        if (category) {
-            params.append('id', category);
+        let url = `${movieProviderApi}`;
+        if(search) {
+            url = url + `/search?key=${search}${page ? `&page=${page}` : ''}`
+        } else {
+            if (category) {
+                params.append('id', category);
+            }
+            if (page) {
+                params.append('page', page);
+            }
+            url = url + `/list${params.toString() ? '?' + params.toString() : ''}`
         }
-        if (page) {
-            params.append('page', page);
-        }
-
-        const url = `${movieProviderApi}/list${params.toString() ? '?' + params.toString() : ''}`;
-        console.log(url);
         const response = await axios.get(url);
         const movies = response.data;
         reply.send(movies);
@@ -30,7 +33,7 @@ export const toGetAllMovies = async (request: FastifyRequest, reply: FastifyRepl
 export const toPlayMovie = async (request: FastifyRequest, reply: FastifyReply) => {
     const body = request.body as { id: string };
     const { id } = body;
-    const playUrl = await axios.get(`https://api.keibalv.com/vods?id=${id}`);
+    const playUrl = await axios.get(`${movieProviderApi}/vods?id=${id}`);
     if(playUrl.data.data.plays[0]) {
         const { data } = playUrl.data;
         const { m3u8 } = data.plays[0];

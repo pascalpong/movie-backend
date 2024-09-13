@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import cors from '@fastify/cors';
 import movieRoutes from './routes/movie.route';
+import authRoutes from './routes/user.route'
 import mongoose from 'mongoose';
 
 
@@ -27,5 +28,6 @@ connectToDatabase();
 
 // Register routes
 app.register(movieRoutes);
+app.register(authRoutes)
 
 export default app;

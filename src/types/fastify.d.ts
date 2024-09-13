@@ -1,4 +1,6 @@
 import 'fastify';
+import { FastifyRequest } from 'fastify';
+import { IUser } from '../models/user.model';
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -7,5 +9,9 @@ declare module 'fastify' {
         collection<T>(name: string): Collection<T>;
       };
     };
+  }
+
+  interface FastifyRequest {
+    user?: IUser;
   }
 }
