@@ -1,39 +1,47 @@
 import crypto from 'crypto';
+import MovieType from '../../types/movie.type';
 
-export const aes128Encrypt = async (key: string, data: string) => {
+export const aes128Encrypt = (key: string, data: string): string => {
     const padding = 16 - (data.length % 16);
     const paddedData = data + String.fromCharCode(padding).repeat(padding);
     const keySize = 16;
     const ivSize = 16;
     
     let genKeyData = '';
-    while (genKeyData.length < 32) {
+    do {
         genKeyData += crypto.createHash('md5').update(genKeyData + key).digest('binary');
-    }
+    } while (genKeyData.length < 32);
     
     const generatedKey = genKeyData.substring(0, keySize);
     const generatedIV = genKeyData.substring(16, 32);
     
     const cipher = crypto.createCipheriv('aes-128-cbc', Buffer.from(generatedKey, 'binary'), Buffer.from(generatedIV, 'binary'));
-    let encrypted = cipher.update(paddedData, 'utf8', 'binary');
-    encrypted += cipher.final('binary');
+    cipher.setAutoPadding(false);
+    let encrypted = cipher.update(paddedData, 'utf8', 'base64');
+    encrypted += cipher.final('base64');
     
-    return Buffer.from(encrypted, 'binary').toString('hex');
+    return encrypted;
 }
 
-export const getRealIp = async (req: any) => {
-    return req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || '0.0.0.0';
+export const getRealIp = (req: any): string => {
+    return req.ip || req.connection.remoteAddress || '0.0.0.0';
 }
 
 export const generateSignedLink = async (req: any) => {
-    const ip = await getRealIp(req);
+    const ip = getRealIp(req);
+    console.log(ip,'------------------------')
     const time = Date.now() + '000';
     const key = 'btc369369';
-    const sign = await aes128Encrypt(key, `timestamp=${time}&ip=${ip}`);
+    const sign = aes128Encrypt(key, `timestamp=${time}&ip=${ip}`);
+    console.log(sign,'signsignsignsignsignsign')
     
     return {
         timestamp: time,
         ip,
         sign: sign
     };
+}
+
+export const orderByRank = async (movies: MovieType[]) => {
+    return movies.sort((a: MovieType, b: MovieType) => parseInt(a.view_count || '0') - parseInt(b.view_count || '0'));
 }

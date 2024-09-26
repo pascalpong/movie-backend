@@ -44,7 +44,14 @@ export const login = async (request: FastifyRequest, reply: FastifyReply) => {
         const accessToken = createAccessToken(user._id);
         const refreshToken = createRefreshToken(user._id);
 
-        reply.send({ accessToken, refreshToken });
+        reply.send({ 
+            id: user.id,
+            username: user.username,
+            tokens: {
+                accessToken, 
+                refreshToken
+            } 
+        });
     } catch (error) {
         console.log(error)
         reply.status(500).send({ message: 'Error signing in' });

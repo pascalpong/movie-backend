@@ -1,22 +1,10 @@
 import Movie from '../../types/movie.type';
-import { Model, ObjectId as MongooseObjectId, Types } from 'mongoose'; // Ensure ObjectId is imported
+import { Model } from 'mongoose';
 
 let movieModel: Model<Movie>;
 
-export const initializeCollection = (model: Model<Movie>) => {
+export const initializeMovieCollection = (model: Model<Movie>) => {
   movieModel = model;
-};
-
-export const getAllMovies = async () => {
-    if (!movieModel) {
-        throw new Error('Movie model is not initialized. Call initializeCollection first.');
-    }
-    try {
-        return await movieModel.find();
-    } catch (error) {
-        console.error('Error fetching movies:', error);
-        throw error;
-    }
 };
 
 export const addMovie = async (movie: Movie) => {
